@@ -9,19 +9,74 @@
   
 </head>
   <body class="bg-[#181028] p-3 flex justify-center items-center min-h-screen">
-    <section class="bg-white text-[#181028] p-8 shadow-lg max-w-md md:max-w-lg">
+    <section class="bg-white text-[#181028] p-8 shadow-lg max-w-sm w-full">
       <header class="text-center">
         <p>PLAYING NOW</p>
         <p class="font-bold text-lg">Someone Lived This</p>
       </header>
-      <img class="w-60 aspect-square abject-cover mx-auto my-8" src="https://images.unsplash.com/photo-1534790021298-16d65d290461?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" alt="unsplash" />
-      
-      <div>
-        <progress class="w-full" id="file" value="32" max="100">
-          <span></span>
-        </progress>
-      </div>
+      <img class="w-60 aspect-square abject-cover mx-auto my-6" src="https://images.unsplash.com/photo-1534790021298-16d65d290461?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" alt="unsplash" />
       <audio controls src="https://raw.githubusercontent.com/florinpop17/stream-songs/master/ambient.mp3"></audio>
+      
+        <progress class="w-full" id="file" value="32" max="100">
+        </progress>
+        <div class="flex justify-between">
+          <small>3:47</small>
+          <small class="ml-auto">5:47</small>
+        </div>
+
+        <div class="flex items-center justify-evenly text-gray-400 gap-2 my-4">
+          <button class="hover:text-gray-900"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrows-shuffle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 4l3 3l-3 3"></path>
+            <path d="M18 20l3 -3l-3 -3"></path>
+            <path d="M3 7h3a5 5 0 0 1 5 5a5 5 0 0 0 5 5h5"></path>
+            <path d="M21 7h-5a4.978 4.978 0 0 0 -3 1m-4 8a4.984 4.984 0 0 1 -3 1h-3"></path>
+         </svg></button>
+          <button class="hover:text-gray-900"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-track-prev" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M21 5v14l-8 -7z"></path>
+            <path d="M10 5v14l-8 -7z"></path>
+         </svg></button>
+          <button class="hover:text-gray-900 flex border-2 border-gray-400 hover:border-gray-900 rounded-full w-12 h-12 items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-play-filled" width="30" height="30" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" stroke-width="0" fill="currentColor"></path>
+           </svg>
+           <!-- <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-pause-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M9 4h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2z" stroke-width="0" fill="currentColor"></path>
+            <path d="M17 4h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2z" stroke-width="0" fill="currentColor"></path>
+         </svg> -->
+          </button>
+          <button class="hover:text-gray-900"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-track-next" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M3 5v14l8 -7z"></path>
+            <path d="M14 5v14l8 -7z"></path>
+         </svg></button>
+          <button class="hover:text-gray-900"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-repeat" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M4 12v-3a3 3 0 0 1 3 -3h13m-3 -3l3 3l-3 3"></path>
+            <path d="M20 12v3a3 3 0 0 1 -3 3h-13m3 3l-3 -3l3 -3"></path>
+         </svg></button>
+        </div>
+
+        <div class="space-y-2 transition-all">
+          <button class="transition-all p-2 hover:font-bold flex justify-between w-full">
+            Song Title
+            <span>3:37</span>
+          </button>
+          <button class="transition-all p-2 hover:font-bold flex justify-between w-full">
+            Song Title
+            <span>3:37</span>
+          </button><button class="transition-all p-2 hover:font-bold flex justify-between w-full">
+            Song Title
+            <span>3:37</span>
+          </button><button class="transition-all p-2 hover:font-bold flex justify-between w-full">
+            Song Title
+            <span>3:37</span>
+          </button>
+        </div>
+
 
       <!-- <audio controls src="https://raw.githubusercontent.com/florinpop17/stream-songs/master/garage.mp3"></audio>
       <audio controls src="https://raw.githubusercontent.com/florinpop17/stream-songs/master/study.mp3"></audio> -->
