@@ -4,11 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="index.css" />
   <script src="https://cdn.tailwindcss.com"></script>
+  
 </head>
-  <body class="bg-[#181028] flex justify-center items-center min-h-screen">
-    <div class="bg-white text-[#181028] p-8 space-y-4 shadow-lg rounded-xl max-w-md md:max-d-lg">
-      <audio controls src="https://raw.githubusercontent.com/florinpop17/stream-songs/blob/master/ambient.mp3"></audio>
-    </div>
+  <body class="bg-[#181028] p-3 flex justify-center items-center min-h-screen">
+    <section class="bg-white text-[#181028] p-8 shadow-lg max-w-md md:max-w-lg">
+      <header class="text-center">
+        <p>PLAYING NOW</p>
+        <p class="font-bold text-lg">Someone Lived This</p>
+      </header>
+      <img class="w-60 aspect-square abject-cover mx-auto my-8" src="https://images.unsplash.com/photo-1534790021298-16d65d290461?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" alt="unsplash" />
+      
+      <div>
+        <progress class="w-full" id="file" value="32" max="100">
+          <span></span>
+        </progress>
+      </div>
+      <audio controls src="https://raw.githubusercontent.com/florinpop17/stream-songs/master/ambient.mp3"></audio>
+
+      <!-- <audio controls src="https://raw.githubusercontent.com/florinpop17/stream-songs/master/garage.mp3"></audio>
+      <audio controls src="https://raw.githubusercontent.com/florinpop17/stream-songs/master/study.mp3"></audio> -->
+    </section>
   </body>
 </html>
