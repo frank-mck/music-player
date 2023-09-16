@@ -30,79 +30,102 @@ const songs = [
   }
 ]
 
-let activeSong = undefined;
+class PlayAlbum {
+  constructor(
+    songs
+  ) {
+    this.songs = songs;
+    this.titleEl = document.querySelector('#title');
+    this.artistEl = document.querySelector('#artist');
+    this.thumbnailEl = document.querySelector('#thumbnail');
+    this.progressEl = document.querySelector('#progress');
+    this.currentTimeEl = document.querySelector('#current-time');
+    this.totalTimeEl = document.querySelector('#total-time');
+    this.repeatBtn = document.querySelector('#repeat-btn');
+    this.previousBtn = document.querySelector('#prev-btn');
+    this.toggleBtn = document.querySelector('#toggle-btn');
+    this.nextBtn = document.querySelector('#next-btn');
+    this.shuffleBtn = document.querySelector('#shuffle-btn');
+    this.playlistEl = document.querySelector('#playlist');
+    this.playbtn = document.querySelector("[data-target-play]");
+    this.pausebtn = document.querySelector("[data-target-pause]");
+    this.activeSong = undefined;
 
-const titleEl = document.querySelector('#title');
-const artistEl = document.querySelector('#artist');
-const thumbnailEl = document.querySelector('#thumbnail');
-const progressEl = document.querySelector('#progress');
-const currentTimeEl = document.querySelector('#current-time');
-const totalTimeEl = document.querySelector('#total-time');
-const repeatBtn = document.querySelector('#repeat-btn');
-const previousBtn = document.querySelector('#prev-btn');
-const toggleBtn = document.querySelector('#toggle-btn');
-const nextBtn = document.querySelector('#next-btn');
-const shuffleBtn = document.querySelector('#shuffle-btn');
-const playlistEl = document.querySelector('#playlist');
-const playbtn = document.querySelector("[data-target-play]");
-const pausebtn = document.querySelector("[data-target-pause]");
-
-songs.forEach((song, index) => {
-  const songBtn = document.createElement('button');
-  const songEl = document.createElement('audio');
-
-  songBtn.className = 'py-2 flex justify-between w-full hover:font-bold';
- 
-  songEl.src = song.url;
-  songEl.controls = true;
-
-  playlistEl.appendChild(songEl);
-
-  songEl.addEventListener('loadedmetadata', () => {
-    const time = getReadableTime(songEl.duration);
-    song.time = time;
-
-    songBtn.innerHTML = `${song.title} <span>${time}</span>`;
-    playlistEl.appendChild(songBtn);
-
-    if (index === 0) {
-      currentTimeEl.innerText =`0:00`;
-      totalTimeEl.innerText = time;
-      getSongDetails(song);
-    }
-  })
-
-  songEl.addEventListener("timeupdate", () => {
-    const { currentTime } = songEl;
-    updateProgress(currentTime)
-    currentTimeEl.innerText = getReadableTime(currentTime)
-  });
-
-  toggleBtn.addEventListener('click', () => {
-    playbtn.classList.toggle('hidden');
-    pausebtn.classList.toggle('hidden');
-
-    if (activeSong.paused) {
-      activeSong.play();
-    } else {
-      activeSong.pause();
-    }
-  })
-
-  function updateProgress(time) {
-    progressEl.value = time / (activeSong.duration * 100);
+    this.iterateSongs();
   }
 
-  function getSongDetails(song) {
-    activeSong = songEl;
-    totalTimeEl.innerText = song.time;
-    thumbnailEl.src = song.thumbnail;
-    titleEl.innerText = song.title;
-    artistEl.innerText = song.artist;
+  iterateSongs() {
+    this.songs.forEach((song, index) => {
+      this.createSong(song, index)
+    })
   }
 
-  function getReadableTime(duration) {
+  createSong(song, index) {
+    const songBtn = document.createElement('button');
+    const songEl = document.createElement('audio');
+
+    songBtn.className = 'py-2 flex justify-between w-full hover:font-bold';
+    songEl.src = song.url;
+    songEl.controls = true;
+    songEl.classList.add('hidden')
+
+    this.playlistEl?.appendChild(songEl);
+
+    songEl.addEventListener('loadedmetadata', () => {
+      const time = this.getReadableTime(songEl.duration);
+      song.time = time;
+  
+      songBtn.innerHTML = `${song.title} <span>${time}</span>`;
+      this.playlistEl?.appendChild(songBtn);
+  
+      if (index === 0) {
+        this.currentTimeEl.innerText = `0:00`;
+        this.totalTimeEl.innerText = time;
+        this.setSongDetails(songEl, song);
+      }
+    })
+
+    songBtn.addEventListener('click', () => {
+      this.activeSong = song;
+      this.setSongDetails(songEl, this.activeSong);
+      this.activeSong.currentTime = 0;
+    })
+  
+    songEl.addEventListener("timeupdate", () => {
+      const { currentTime } = songEl;
+      this.updateProgress(currentTime)
+      this.currentTimeEl.innerText = this.getReadableTime(currentTime)
+    });
+
+    this.toggleBtn.addEventListener('click', () => {
+      this.playbtn.classList.toggle('hidden');
+      this.pausebtn.classList.toggle('hidden');
+  
+      if (this.activeSong.paused) {
+        this.activeSong.play();
+      } else {
+        this.activeSong.pause();
+      }
+    })
+  }
+
+  getReadableTime(duration) {
     return `${Math.floor(duration / 60)}:${`${Math.floor(duration) % 60}`.padStart(2, '0')}`;
   }
-  
-})
+
+  updateProgress(time) {
+    this.progressEl.value = time / (this.activeSong.duration * 100);
+  }
+ 
+  setSongDetails(songEl, song) {
+    songEl.currentTime = 0;
+    this.currentTimeEl.innerText = '0:00';
+    this.activeSong = songEl;
+    this.totalTimeEl.innerText = song.time;
+    this.thumbnailEl.src = song.thumbnail;
+    this.titleEl.innerText = song.title;
+    this.artistEl.innerText = song.artist;
+  }
+}
+
+new PlayAlbum(songs);
