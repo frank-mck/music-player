@@ -50,6 +50,8 @@ class PlayAlbum {
     this.playbtn = document.querySelector("[data-target-play]");
     this.pausebtn = document.querySelector("[data-target-pause]");
     this.activeSong = undefined;
+    this.songsEls = [];
+    this.activeSongInx = undefined;
 
     this.iterateSongs();
   }
@@ -63,6 +65,8 @@ class PlayAlbum {
   createSong(song, index) {
     const songBtn = document.createElement('button');
     const songEl = document.createElement('audio');
+
+    this.songsEls.push(songEl)
 
     songBtn.className = 'py-2 flex justify-between w-full hover:font-bold';
     songEl.src = song.url;
@@ -79,16 +83,15 @@ class PlayAlbum {
       this.playlistEl?.appendChild(songBtn);
   
       if (index === 0) {
-        this.currentTimeEl.innerText = `0:00`;
-        this.totalTimeEl.innerText = time;
+        this.activeSongInx = index;
         this.setSongDetails(songEl, song);
       }
     })
 
     songBtn.addEventListener('click', () => {
+      this.activeSongInx = index;
       this.activeSong = song;
       this.setSongDetails(songEl, this.activeSong);
-      this.activeSong.currentTime = 0;
     })
   
     songEl.addEventListener("timeupdate", () => {
@@ -101,10 +104,10 @@ class PlayAlbum {
       this.playbtn.classList.toggle('hidden');
       this.pausebtn.classList.toggle('hidden');
   
-      if (this.activeSong.paused) {
-        this.activeSong.play();
+      if (this.songsEls[this.activeSongInx].paused) {
+        this.songsEls[this.activeSongInx].play();
       } else {
-        this.activeSong.pause();
+        this.songsEls[this.activeSongInx].pause();
       }
     })
   }
@@ -114,11 +117,11 @@ class PlayAlbum {
   }
 
   updateProgress(time) {
-    this.progressEl.value = time / (this.activeSong.duration * 100);
+    this.progressEl.value = time / this.songsEls[this.activeSongInx].duration;
   }
  
   setSongDetails(songEl, song) {
-    songEl.currentTime = 0;
+    this.songsEls[this.activeSongInx].currentTime = 0;
     this.currentTimeEl.innerText = '0:00';
     this.activeSong = songEl;
     this.totalTimeEl.innerText = song.time;
