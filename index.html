@@ -16,7 +16,7 @@
       </header>
       <img
         id="thumbnail"
-        class="w-60 aspect-square abject-cover mx-auto my-6 shadow-lg"
+        class="w-60 aspect-square abject-cover mx-auto my-6 shadow-lg hover:scale-110 transition-all"
         alt="unsplash"
       />
       <progress id="progress" class="w-full" id="file" value="0"></progress>
@@ -26,10 +26,9 @@
       </div>
 
       <div class="flex items-center justify-evenly text-gray-400 gap-2 my-4">
-        <button id="repeat-btn" class="hover:text-gray-900">
+        <button id="shuffle-btn" class="hover:text-gray-900">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-arrows-shuffle"
             width="24"
             height="24"
             viewBox="0 0 24 24"
@@ -68,12 +67,11 @@
         </button>
         <button
           id="toggle-btn"
-          class="hover:text-gray-900 flex border-2 border-gray-400 hover:border-gray-900 rounded-full w-12 h-12 items-center justify-center"
+          class="text-gray-900 flex border-2 border-gray-900 hover:scale-105 rounded-full w-12 h-12 items-center justify-center"
         >
           <svg
             data-target-play
             xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-player-play-filled"
             width="30"
             height="30"
             viewBox="0 0 24 24"
@@ -134,7 +132,7 @@
             <path d="M14 5v14l8 -7z"></path>
           </svg>
         </button>
-        <button id="shuffle-btn" class="hover:text-gray-900">
+        <button id="repeat-btn" class="hover:text-gray-900">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="icon icon-tabler icon-tabler-repeat"
@@ -154,7 +152,7 @@
         </button>
       </div>
 
-      <div id="playlist" class="space-y-2"></div>
+      <div id="playlist" class="space-y-2 transition-all"></div>
     </section>
     <script src="index.js"></script>
   </body>

@@ -1,35 +1,35 @@
 const songs = [
   {
+    title: "Night Vlog",
+    artist: "Footsteps on the moon",
+    url: "https://raw.githubusercontent.com/florinpop17/stream-songs/master/night-vlog.mp3",
+    thumbnail:
+      "https://images.unsplash.com/photo-1489549132488-d00b7eee80f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=333&q=80",
+  },
+  {
     title: "Ambient",
-    artist: "Foot steps on the moon",
+    artist: "Footsteps on the moon",
     url: "https://raw.githubusercontent.com/florinpop17/stream-songs/master/ambient.mp3",
     thumbnail:
       "https://images.unsplash.com/photo-1534790021298-16d65d290461?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=333&q=80",
   },
   {
     title: "Garage",
-    artist: "Foot steps on the moon",
+    artist: "Footsteps on the moon",
     url: "https://raw.githubusercontent.com/florinpop17/stream-songs/master/garage.mp3",
     thumbnail:
       "https://images.unsplash.com/photo-1551522435-a13afa10f103?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=333&q=80",
   },
   {
-    title: "Night Vlog",
-    artist: "Foot steps on the moon",
-    url: "https://raw.githubusercontent.com/florinpop17/stream-songs/master/night-vlog.mp3",
-    thumbnail:
-      "https://images.unsplash.com/photo-1489549132488-d00b7eee80f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=333&q=80",
-  },
-  {
     title: "Study",
-    artist: "Foot steps on the moon",
+    artist: "Footsteps on the moon",
     url: "https://raw.githubusercontent.com/florinpop17/stream-songs/master/study.mp3",
     thumbnail:
       "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=333&q=80",
   },
   {
     title: "Forest",
-    artist: "Foot steps on the moon",
+    artist: "Footsteps on the moon",
     url: "https://raw.githubusercontent.com/florinpop17/stream-songs/master/forest.mp3",
     thumbnail:
       "https://images.unsplash.com/photo-1511497584788-876760111969?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=333&q=80",
@@ -38,6 +38,7 @@ const songs = [
 
 class PlayAlbum {
   constructor(songs) {
+    this.orderedSongs = songs;
     this.songs = songs;
     this.titleEl = document.querySelector("#title");
     this.artistEl = document.querySelector("#artist");
@@ -53,6 +54,8 @@ class PlayAlbum {
     this.playlistEl = document.querySelector("#playlist");
     this.playbtn = document.querySelector("[data-target-play]");
     this.pausebtn = document.querySelector("[data-target-pause]");
+    this.shuffleBtnActive = false;
+    this.repeatBtnActive = false;
     this.activeSong = undefined;
     this.activeSongInx = undefined;
     this.activeSongBtn = undefined;
@@ -60,22 +63,59 @@ class PlayAlbum {
     this.songsBtns = [];
 
     this.iterateSongs = this.iterateSongs.bind(this);
-    this.nextSong = this.nextSong.bind(this);
-    this.prevSong = this.prevSong.bind(this);
+    this.skipSong = this.skipSong.bind(this);
+    this.shuffleSongs = this.shuffleSongs.bind(this);
+    this.repeatSong = this.repeatSong.bind(this);
+    this.togglePlayBtn = this.togglePlayBtn.bind(this);
 
-    this.nextBtn.addEventListener("click", this.nextSong);
-    this.previousBtn.addEventListener("click", this.prevSong);
+    this.nextBtn.addEventListener("click", () => this.skipSong("next"));
+    this.previousBtn.addEventListener("click", () => this.skipSong("prev"));
+    this.shuffleBtn.addEventListener("click", () => this.shuffleSongs());
+    this.repeatBtn.addEventListener("click", () => this.repeatSong());
+    this.toggleBtn.addEventListener("click", () => this.togglePlayBtn());
 
     this.iterateSongs();
   }
 
   iterateSongs() {
     this.songs.forEach((song, index) => {
-      this.createSong(song, index);
+      const { songBtn, songEl } = this.createSong(song);
+
+      songEl.addEventListener("loadedmetadata", () => {
+        const time = this.getReadableTime(songEl.duration);
+        song.time = time;
+
+        songBtn.innerHTML = `${song.title} <span>${time}</span>`;
+
+        if (index === 0) {
+          this.activeSongInx = index;
+          this.setSongDetails(song, songEl);
+          this.activeSongBtn = songBtn;
+          songBtn.classList.add("font-bold");
+        }
+      });
+
+      this.playlistEl?.appendChild(songBtn);
+      this.playlistEl.classList.add(`h-[220px]`);
+
+      songBtn.addEventListener("click", () => {
+        this.stopPlayingSong();
+        this.toggleActiveBtn(songBtn);
+        this.activeSongInx = index;
+        this.activeSong = song;
+        this.setSongDetails(this.activeSong, songEl);
+        this.songsEls[this.activeSongInx].play();
+      });
+
+      songEl.addEventListener("timeupdate", () => {
+        const { currentTime } = songEl;
+        this.updateProgress(currentTime);
+        this.currentTimeEl.innerText = this.getReadableTime(currentTime);
+      });
     });
   }
 
-  createSong(song, index) {
+  createSong(song) {
     const songBtn = document.createElement("button");
     const songEl = document.createElement("audio");
 
@@ -95,46 +135,18 @@ class PlayAlbum {
     hiddenImagesEl.classList.add("hidden");
     document.body.appendChild(hiddenImagesEl);
 
-    songEl.addEventListener("loadedmetadata", () => {
-      const time = this.getReadableTime(songEl.duration);
-      song.time = time;
+    return { songBtn, songEl };
+  }
 
-      songBtn.innerHTML = `${song.title} <span>${time}</span>`;
-      this.playlistEl?.appendChild(songBtn);
+  togglePlayBtn() {
+    this.playbtn.classList.toggle("hidden");
+    this.pausebtn.classList.toggle("hidden");
 
-      if (index === 0) {
-        this.activeSongInx = index;
-        this.setSongDetails(song, songEl);
-        this.activeSongBtn = songBtn;
-        songBtn.classList.add("font-bold");
-      }
-    });
-
-    songBtn.addEventListener("click", () => {
-      this.stopPlayingSong();
-      this.toggleActiveBtn(songBtn);
-      this.activeSongInx = index;
-      this.activeSong = song;
-      this.setSongDetails(this.activeSong, songEl);
+    if (this.songsEls[this.activeSongInx].paused) {
       this.songsEls[this.activeSongInx].play();
-    });
-
-    songEl.addEventListener("timeupdate", () => {
-      const { currentTime } = songEl;
-      this.updateProgress(currentTime);
-      this.currentTimeEl.innerText = this.getReadableTime(currentTime);
-    });
-
-    this.toggleBtn.addEventListener("click", () => {
-      this.playbtn.classList.toggle("hidden");
-      this.pausebtn.classList.toggle("hidden");
-
-      if (this.songsEls[this.activeSongInx].paused) {
-        this.songsEls[this.activeSongInx].play();
-      } else {
-        this.songsEls[this.activeSongInx].pause();
-      }
-    });
+    } else {
+      this.songsEls[this.activeSongInx].pause();
+    }
   }
 
   stopPlayingSong() {
@@ -151,46 +163,90 @@ class PlayAlbum {
     songBtn.classList.add("font-bold");
   }
 
-  nextSong() {
-    const index =
-      this.activeSongInx === this.songs.length - 1 ? 0 : this.activeSongInx + 1;
-    const songBtn = this.songsBtns[index];
-    this.toggleActiveBtn(songBtn);
-    this.stopPlayingSong();
-    this.songsEls[index].play();
-    this.activeSongInx++;
+  skipSong(type) {
+    let index;
 
-    if (this.activeSongInx > songs.length - 1) {
-      this.activeSongInx = 0;
+    if (type === "next") {
+      index =
+        this.activeSongInx === this.songs.length - 1
+          ? 0
+          : this.activeSongInx + 1;
+      const songBtn = this.songsBtns[index];
+      this.toggleActiveBtn(songBtn);
+      this.stopPlayingSong();
+      this.activeSongInx++;
+
+      if (this.activeSongInx > songs.length - 1) {
+        this.activeSongInx = 0;
+      }
+    } else if (type === "prev") {
+      index =
+        this.activeSongInx === 0 ? songs.length - 1 : this.activeSongInx - 1;
+      const songBtn = this.songsBtns[index];
+      this.toggleActiveBtn(songBtn);
+      this.stopPlayingSong();
+      this.activeSongInx--;
+
+      if (this.activeSongInx < 0) {
+        this.activeSongInx = this.songs.length - 1;
+      }
     }
 
+    this.songsEls[index].play();
     this.setSongDetails(this.songs[this.activeSongInx]);
   }
 
-  prevSong() {
-    const index =
-      this.activeSongInx === 0 ? songs.length - 1 : this.activeSongInx - 1;
-    const songBtn = this.songsBtns[index];
-    this.toggleActiveBtn(songBtn);
-    this.stopPlayingSong();
-    this.songsEls[index].play();
-    this.activeSongInx--;
+  shuffleSongs() {
+    if (this.shuffleBtnActive) {
+      this.shuffleBtn.className = "hover:font-bold hover:text-gray-900";
+      this.shuffleBtnActive = false;
 
-    if (this.activeSongInx < 0) {
-      this.activeSongInx = this.songs.length - 1;
+      return;
+    }
+    let currentIndex = this.songs.length,
+      randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex > 0) {
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [this.songs[currentIndex], this.songs[randomIndex]] = [
+        this.songs[randomIndex],
+        this.songs[currentIndex],
+      ];
     }
 
-    this.setSongDetails(this.songs[this.activeSongInx]);
+    // this.stopPlayingSong();
+    this.playlistEl.innerHTML = "";
+    this.shuffleBtn.className = "text-[#1DB954] hover:scale-105";
+    this.shuffleBtnActive = true;
+    this.activeSongBtn = undefined;
+    this.activeSong = undefined;
+    this.songsBtns = [];
+    this.iterateSongs();
   }
 
-  setSongDetails(song, songEl) {
+  repeatSong() {
+    if (this.repeatBtnActive) {
+      this.repeatBtnActive = false;
+      this.repeatBtn.className = "hover:font-bold hover:text-gray-900";
+      return;
+    }
+    this.repeatBtnActive = true;
+    this.repeatBtn.className = "text-[#1DB954] hover:scale-105";
+  }
+
+  setSongDetails({ time, thumbnail, title, artist }, songEl) {
     this.songsEls[this.activeSongInx].currentTime = 0;
     this.currentTimeEl.innerText = "0:00";
     this.activeSong = songEl;
-    this.totalTimeEl.innerText = song.time;
-    this.thumbnailEl.src = song.thumbnail;
-    this.titleEl.innerText = song.title;
-    this.artistEl.innerText = song.artist;
+    this.totalTimeEl.innerText = time;
+    this.thumbnailEl.src = thumbnail;
+    this.titleEl.innerText = title;
+    this.artistEl.innerText = artist;
   }
 
   getReadableTime(duration) {
