@@ -52,8 +52,6 @@ class PlayAlbum {
     this.nextBtn = document.querySelector("#next-btn");
     this.shuffleBtn = document.querySelector("#shuffle-btn");
     this.playlistEl = document.querySelector("#playlist");
-    this.playbtn = document.querySelector("[data-target-play]");
-    this.pausebtn = document.querySelector("[data-target-pause]");
     this.shuffleBtnActive = false;
     this.repeatBtnActive = false;
     this.activeSong = undefined;
@@ -96,15 +94,15 @@ class PlayAlbum {
       });
 
       this.playlistEl?.appendChild(songBtn);
-      this.playlistEl.classList.add(`h-[220px]`);
+      this.playlistEl.classList.add(`min-h-[220px]`);
 
       songBtn.addEventListener("click", () => {
         this.stopPlayingSong();
-        this.toggleActiveBtn(songBtn);
         this.activeSongInx = index;
         this.activeSong = song;
         this.setSongDetails(this.activeSong, songEl);
-        this.songsEls[this.activeSongInx].play();
+        this.toggleActiveBtn(songBtn);
+        this.playSong();
       });
 
       songEl.addEventListener("timeupdate", () => {
@@ -139,9 +137,7 @@ class PlayAlbum {
   }
 
   togglePlayBtn() {
-    this.playbtn.classList.toggle("hidden");
-    this.pausebtn.classList.toggle("hidden");
-
+    this.toggleBtn.classList.toggle("play");
     if (this.songsEls[this.activeSongInx].paused) {
       this.songsEls[this.activeSongInx].play();
     } else {
@@ -152,9 +148,15 @@ class PlayAlbum {
   stopPlayingSong() {
     if (!this.songsEls[this.activeSongInx].paused) {
       this.songsEls[this.activeSongInx].pause();
+      this.toggleBtn.classList.remove("play");
     }
-    this.playbtn.classList.add("hidden");
-    this.pausebtn.classList.remove("hidden");
+  }
+
+  playSong() {
+    if (this.songsEls[this.activeSongInx].paused) {
+      this.songsEls[this.activeSongInx].play();
+      this.toggleBtn.classList.add("play");
+    }
   }
 
   toggleActiveBtn(songBtn) {
@@ -192,7 +194,7 @@ class PlayAlbum {
       }
     }
 
-    this.songsEls[index].play();
+    this.playSong();
     this.setSongDetails(this.songs[this.activeSongInx]);
   }
 
@@ -219,13 +221,14 @@ class PlayAlbum {
       ];
     }
 
-    // this.stopPlayingSong();
+    this.stopPlayingSong();
     this.playlistEl.innerHTML = "";
     this.shuffleBtn.className = "text-[#1DB954] hover:scale-105";
     this.shuffleBtnActive = true;
     this.activeSongBtn = undefined;
     this.activeSong = undefined;
     this.songsBtns = [];
+    this.songsEls = [];
     this.iterateSongs();
   }
 

@@ -67,10 +67,10 @@
         </button>
         <button
           id="toggle-btn"
-          class="text-gray-900 flex border-2 border-gray-900 hover:scale-105 rounded-full w-12 h-12 items-center justify-center"
+          class="text-gray-900 group flex border-2 border-gray-900 hover:scale-105 rounded-full w-12 h-12 items-center justify-center"
         >
           <svg
-            data-target-play
+            class="group-[.play]:hidden"
             xmlns="http://www.w3.org/2000/svg"
             width="30"
             height="30"
@@ -89,7 +89,7 @@
             ></path>
           </svg>
           <svg
-            data-target-pause
+            class="group-[.play]:block hidden"
             xmlns="http://www.w3.org/2000/svg"
             class="hidden"
             width="24"
@@ -154,6 +154,6 @@
 
       <div id="playlist" class="space-y-2 transition-all"></div>
     </section>
-    <script src="index.js"></script>
+    <script src="playAlbum.js"></script>
   </body>
 </html>
