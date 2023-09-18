@@ -1,3 +1,5 @@
+"use strict";
+
 const songs = [
   {
     title: "Night Vlog",
@@ -38,14 +40,7 @@ const songs = [
 
 class PlayAlbum {
   constructor(songs) {
-    this.orderedSongs = songs;
     this.songs = songs;
-    this.titleEl = document.querySelector("#title");
-    this.artistEl = document.querySelector("#artist");
-    this.thumbnailEl = document.querySelector("#thumbnail");
-    this.progressEl = document.querySelector("#progress");
-    this.currentTimeEl = document.querySelector("#current-time");
-    this.totalTimeEl = document.querySelector("#total-time");
     this.repeatBtn = document.querySelector("#repeat-btn");
     this.previousBtn = document.querySelector("#prev-btn");
     this.toggleBtn = document.querySelector("#toggle-btn");
@@ -57,7 +52,7 @@ class PlayAlbum {
     this.activeSong = undefined;
     this.activeSongInx = undefined;
     this.activeSongBtn = undefined;
-    this.songsEls = [];
+    this.songAudios = [];
     this.songsBtns = [];
 
     this.iterateSongs = this.iterateSongs.bind(this);
@@ -77,91 +72,87 @@ class PlayAlbum {
 
   iterateSongs() {
     this.songs.forEach((song, index) => {
-      const { songBtn, songEl } = this.createSong(song);
+      if (index === 0) {
+        this.activeSongInx = 0;
+      }
 
-      songEl.addEventListener("loadedmetadata", () => {
-        const time = this.getReadableTime(songEl.duration);
-        song.time = time;
+      const songAudio = new SongAudio(
+        song,
+        this.songAudios,
+        this.activeSongInx,
+        index,
+      );
+      const songBtn = new SongButton(
+        songAudio,
+        song,
+        index,
+        this.activeSong,
+        this.songAudios,
+        this.activeSongInx,
+        this.songsBtns,
+      );
 
-        songBtn.innerHTML = `${song.title} <span>${time}</span>`;
+      this.songAudios.push(songAudio.domElement());
+      this.songsBtns.push(songBtn.domElement());
 
-        if (index === 0) {
-          this.activeSongInx = index;
-          this.setSongDetails(song, songEl);
-          this.activeSongBtn = songBtn;
-          songBtn.classList.add("font-bold");
-        }
-      });
+      songAudio.loadAudioData(songBtn.domElement());
 
-      this.playlistEl?.appendChild(songBtn);
-      this.playlistEl.classList.add(`min-h-[220px]`);
+      this.playlistEl?.appendChild(songAudio.domElement());
+      this.playlistEl?.appendChild(songBtn.domElement());
+      this.playlistEl.classList.add(`h-[220px]`);
 
-      songBtn.addEventListener("click", () => {
-        this.stopPlayingSong();
-        this.activeSongInx = index;
-        this.activeSong = song;
-        this.setSongDetails(this.activeSong, songEl);
-        this.toggleActiveBtn(songBtn);
-        this.playSong();
-      });
-
-      songEl.addEventListener("timeupdate", () => {
-        const { currentTime } = songEl;
-        this.updateProgress(currentTime);
-        this.currentTimeEl.innerText = this.getReadableTime(currentTime);
+      songBtn.domElement().addEventListener("click", () => {
+        this.toggleActiveBtn(this.songsBtns[index]);
+        this.playSelectedSong(song, index);
       });
     });
   }
 
-  createSong(song) {
-    const songBtn = document.createElement("button");
-    const songEl = document.createElement("audio");
+  playSelectedSong(song, index) {
+    if (index === this.activeSongInx) {
+      return;
+    }
 
-    this.songsEls.push(songEl);
-    this.songsBtns.push(songBtn);
+    this.songAudios[this.activeSongInx].pause();
+    this.activeSongInx = index;
 
-    songBtn.className = "py-2 flex justify-between w-full hover:font-bold";
-    songEl.src = song.url;
-    songEl.controls = true;
-    songEl.classList.add("hidden");
-
-    this.playlistEl?.appendChild(songEl);
-
-    // load all images
-    const hiddenImagesEl = document.createElement("img");
-    hiddenImagesEl.src = song.thumbnail;
-    hiddenImagesEl.classList.add("hidden");
-    document.body.appendChild(hiddenImagesEl);
-
-    return { songBtn, songEl };
+    new SetSongDetails(
+      this.songAudios,
+      this.activeSongInx,
+      this.activeSong,
+      song,
+      index,
+      this.songAudios[index],
+    );
+    this.togglePlayBtn();
   }
 
   togglePlayBtn() {
-    this.toggleBtn.classList.toggle("play");
-    if (this.songsEls[this.activeSongInx].paused) {
-      this.songsEls[this.activeSongInx].play();
+    if (this.songAudios[this.activeSongInx].paused) {
+      this.songAudios[this.activeSongInx].play();
+      this.toggleBtn.classList.add("play");
     } else {
-      this.songsEls[this.activeSongInx].pause();
+      this.songAudios[this.activeSongInx].pause();
+      this.toggleBtn.classList.remove("play");
     }
   }
 
   stopPlayingSong() {
-    if (!this.songsEls[this.activeSongInx].paused) {
-      this.songsEls[this.activeSongInx].pause();
+    if (!this.songAudios[this.activeSongInx].paused) {
+      this.songAudios[this.activeSongInx].pause();
       this.toggleBtn.classList.remove("play");
     }
   }
 
   playSong() {
-    if (this.songsEls[this.activeSongInx].paused) {
-      this.songsEls[this.activeSongInx].play();
+    if (this.songAudios[this.activeSongInx].paused) {
+      this.songAudios[this.activeSongInx].play();
       this.toggleBtn.classList.add("play");
     }
   }
 
   toggleActiveBtn(songBtn) {
-    this.activeSongBtn.classList.remove("font-bold");
-    this.activeSongBtn = songBtn;
+    this.songsBtns[this.activeSongInx].classList.remove("font-bold");
     songBtn.classList.add("font-bold");
   }
 
@@ -195,7 +186,14 @@ class PlayAlbum {
     }
 
     this.playSong();
-    this.setSongDetails(this.songs[this.activeSongInx]);
+    new SetSongDetails(
+      this.songAudios,
+      this.activeSongInx,
+      this.activeSong,
+      this.songs[this.activeSongInx],
+      this.index,
+      this.songAudios[this.activeSongInx]
+    );
   }
 
   shuffleSongs() {
@@ -228,7 +226,7 @@ class PlayAlbum {
     this.activeSongBtn = undefined;
     this.activeSong = undefined;
     this.songsBtns = [];
-    this.songsEls = [];
+    this.songAudios = [];
     this.iterateSongs();
   }
 
@@ -242,24 +240,10 @@ class PlayAlbum {
     this.repeatBtn.className = "text-[#1DB954] hover:scale-105";
   }
 
-  setSongDetails({ time, thumbnail, title, artist }, songEl) {
-    this.songsEls[this.activeSongInx].currentTime = 0;
-    this.currentTimeEl.innerText = "0:00";
-    this.activeSong = songEl;
-    this.totalTimeEl.innerText = time;
-    this.thumbnailEl.src = thumbnail;
-    this.titleEl.innerText = title;
-    this.artistEl.innerText = artist;
-  }
-
   getReadableTime(duration) {
     return `${Math.floor(duration / 60)}:${`${
       Math.floor(duration) % 60
     }`.padStart(2, "0")}`;
-  }
-
-  updateProgress(time) {
-    this.progressEl.value = time / this.songsEls[this.activeSongInx].duration;
   }
 }
 
