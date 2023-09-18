@@ -18,10 +18,10 @@ class SetSongDetails {
   }
 
   setNewSong() {
-    this.songAudios[this.activeSongInx].currentTime = 0;
+    this.songAudios[this.activeSongInx].domElement().currentTime = 0;
     this.currentTimeEl.innerText = "0:00";
     this.activeSong = this.song;
-    this.totalTimeEl.innerText = this.getReadableTime(this.audio.duration);
+    this.totalTimeEl.innerText = this.getReadableTime(this.audio.domElement().duration);
     this.thumbnailEl.src = this.song.thumbnail;
     this.titleEl.innerText = this.song.title;
     this.artistEl.innerText = this.song.artist;

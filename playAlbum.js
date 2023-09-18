@@ -92,17 +92,17 @@ class PlayAlbum {
         this.songsBtns,
       );
 
-      this.songAudios.push(songAudio.domElement());
-      this.songsBtns.push(songBtn.domElement());
+      this.songAudios.push(songAudio);
+      this.songsBtns.push(songBtn);
 
-      songAudio.loadAudioData(songBtn.domElement());
+      songAudio.loadAudioData(songBtn);
 
       this.playlistEl?.appendChild(songAudio.domElement());
       this.playlistEl?.appendChild(songBtn.domElement());
       this.playlistEl.classList.add(`h-[220px]`);
 
       songBtn.domElement().addEventListener("click", () => {
-        this.toggleActiveBtn(this.songsBtns[index]);
+        songBtn.toggleActiveBtn(this.songsBtns[index], this.activeSongInx)
         this.playSelectedSong(song, index);
       });
     });
@@ -113,7 +113,7 @@ class PlayAlbum {
       return;
     }
 
-    this.songAudios[this.activeSongInx].pause();
+    this.songAudios[this.activeSongInx].domElement().pause();
     this.activeSongInx = index;
 
     new SetSongDetails(
@@ -128,32 +128,27 @@ class PlayAlbum {
   }
 
   togglePlayBtn() {
-    if (this.songAudios[this.activeSongInx].paused) {
-      this.songAudios[this.activeSongInx].play();
+    if (this.songAudios[this.activeSongInx].domElement().paused) {
+      this.songAudios[this.activeSongInx].domElement().play();
       this.toggleBtn.classList.add("play");
     } else {
-      this.songAudios[this.activeSongInx].pause();
+      this.songAudios[this.activeSongInx].domElement().pause();
       this.toggleBtn.classList.remove("play");
     }
   }
 
   stopPlayingSong() {
-    if (!this.songAudios[this.activeSongInx].paused) {
-      this.songAudios[this.activeSongInx].pause();
+    if (!this.songAudios[this.activeSongInx].domElement().paused) {
+      this.songAudios[this.activeSongInx].domElement().pause();
       this.toggleBtn.classList.remove("play");
     }
   }
 
   playSong() {
-    if (this.songAudios[this.activeSongInx].paused) {
-      this.songAudios[this.activeSongInx].play();
+    if (this.songAudios[this.activeSongInx].domElement().paused) {
+      this.songAudios[this.activeSongInx].domElement().play();
       this.toggleBtn.classList.add("play");
     }
-  }
-
-  toggleActiveBtn(songBtn) {
-    this.songsBtns[this.activeSongInx].classList.remove("font-bold");
-    songBtn.classList.add("font-bold");
   }
 
   skipSong(type) {
@@ -165,7 +160,7 @@ class PlayAlbum {
           ? 0
           : this.activeSongInx + 1;
       const songBtn = this.songsBtns[index];
-      this.toggleActiveBtn(songBtn);
+      songBtn.toggleActiveBtn(songBtn, this.activeSongInx)
       this.stopPlayingSong();
       this.activeSongInx++;
 
@@ -176,7 +171,7 @@ class PlayAlbum {
       index =
         this.activeSongInx === 0 ? songs.length - 1 : this.activeSongInx - 1;
       const songBtn = this.songsBtns[index];
-      this.toggleActiveBtn(songBtn);
+      songBtn.toggleActiveBtn(songBtn, this.activeSongInx)
       this.stopPlayingSong();
       this.activeSongInx--;
 
@@ -192,7 +187,7 @@ class PlayAlbum {
       this.activeSong,
       this.songs[this.activeSongInx],
       this.index,
-      this.songAudios[this.activeSongInx]
+      this.songAudios[this.activeSongInx],
     );
   }
 

@@ -27,7 +27,7 @@ class SongAudio {
       const time = this.getReadableTime(this.audio.duration);
       this.audio.time = time;
 
-      songBtn.innerHTML = `${this.title} <span>${time}</span>`;
+      songBtn.domElement().innerHTML = `${this.title} <span>${time}</span>`;
 
       if (this.index === 0) {
         new SetSongDetails(
@@ -36,10 +36,10 @@ class SongAudio {
           this.activeSong,
           this.song,
           this.index,
-          this.audio,
+          this,
         );
-        this.activeSongBtn = songBtn;
-        songBtn.classList.add("font-bold");
+        this.activeSongBtn = songBtn.domElement();
+        songBtn.domElement().classList.add("font-bold");
       }
     });
   }
