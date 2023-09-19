@@ -30,6 +30,6 @@ progress[value] {
   height: 6px;
 }
 progress[value]::-webkit-progress-value {
-  background-color: #181028;
+  background-color: var(--active-color);
   border-radius: 10px;
 }

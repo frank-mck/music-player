@@ -37,7 +37,7 @@ class SongButton {
   }
 
   toggleActiveBtn(songBtn: SongButton, activeSongInx: number) {
-    this.songsBtns[activeSongInx].title().className = "";
+    this.songsBtns[activeSongInx].title().className = "font-medium";
     this.songsBtns[activeSongInx].activeIcon().classList.add("hidden");
     songBtn.title().className = "text-[var(--active-color)] font-bold";
     songBtn.activeIcon().classList.remove("hidden");
@@ -71,7 +71,7 @@ class SongButton {
       "w-2 h-2 rounded-full bg-[var(--active-color)] absolute left-3 top-[50%] -translate-y-[50%] hidden";
     this.songBtn.className =
       "py-[5px] flex relative px-8 justify-between m-0 p-0 items-center leading-tight w-full mx-auto rounded-md hover:bg-[var(--light-frost)]";
-
+    this.songTitle.classList.add("font-medium");
     textContainer.appendChild(this.activeSongIcon);
     textContainer.appendChild(this.songTitle);
     textContainer.appendChild(songArtist);
