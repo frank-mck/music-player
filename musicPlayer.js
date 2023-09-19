@@ -38,7 +38,7 @@ const songs = [
   },
 ];
 
-class PlayAlbum {
+class MusicPlayer {
   constructor(songs) {
     this.songs = songs;
     this.repeatBtn = document.querySelector("#repeat-btn");
@@ -97,12 +97,12 @@ class PlayAlbum {
 
       songAudio.loadAudioData(songBtn);
 
-      this.playlistEl?.appendChild(songAudio.domElement());
-      this.playlistEl?.appendChild(songBtn.domElement());
       this.playlistEl.classList.add(`h-[220px]`);
+      this.playlistEl?.appendChild(songAudio.element());
+      this.playlistEl?.appendChild(songBtn.element());
 
-      songBtn.domElement().addEventListener("click", () => {
-        songBtn.toggleActiveBtn(this.songsBtns[index], this.activeSongInx)
+      songBtn.element().addEventListener("click", () => {
+        songBtn.toggleActiveBtn(this.songsBtns[index], this.activeSongInx);
         this.playSelectedSong(song, index);
       });
     });
@@ -113,7 +113,7 @@ class PlayAlbum {
       return;
     }
 
-    this.songAudios[this.activeSongInx].domElement().pause();
+    this.songAudios[this.activeSongInx].element().pause();
     this.activeSongInx = index;
 
     new SetSongDetails(
@@ -128,26 +128,12 @@ class PlayAlbum {
   }
 
   togglePlayBtn() {
-    if (this.songAudios[this.activeSongInx].domElement().paused) {
-      this.songAudios[this.activeSongInx].domElement().play();
+    if (this.songAudios[this.activeSongInx].element().paused) {
+      this.songAudios[this.activeSongInx].element().play();
       this.toggleBtn.classList.add("play");
     } else {
-      this.songAudios[this.activeSongInx].domElement().pause();
+      this.songAudios[this.activeSongInx].element().pause();
       this.toggleBtn.classList.remove("play");
-    }
-  }
-
-  stopPlayingSong() {
-    if (!this.songAudios[this.activeSongInx].domElement().paused) {
-      this.songAudios[this.activeSongInx].domElement().pause();
-      this.toggleBtn.classList.remove("play");
-    }
-  }
-
-  playSong() {
-    if (this.songAudios[this.activeSongInx].domElement().paused) {
-      this.songAudios[this.activeSongInx].domElement().play();
-      this.toggleBtn.classList.add("play");
     }
   }
 
@@ -160,8 +146,9 @@ class PlayAlbum {
           ? 0
           : this.activeSongInx + 1;
       const songBtn = this.songsBtns[index];
-      songBtn.toggleActiveBtn(songBtn, this.activeSongInx)
-      this.stopPlayingSong();
+      songBtn.toggleActiveBtn(songBtn, this.activeSongInx);
+      this.songAudios[this.activeSongInx].stopSong();
+      this.toggleBtn.classList.add("play");
       this.activeSongInx++;
 
       if (this.activeSongInx > songs.length - 1) {
@@ -171,8 +158,10 @@ class PlayAlbum {
       index =
         this.activeSongInx === 0 ? songs.length - 1 : this.activeSongInx - 1;
       const songBtn = this.songsBtns[index];
-      songBtn.toggleActiveBtn(songBtn, this.activeSongInx)
-      this.stopPlayingSong();
+      songBtn.toggleActiveBtn(songBtn, this.activeSongInx);
+      this.songAudios[this.activeSongInx].stopSong();
+      this.toggleBtn.classList.add("play");
+
       this.activeSongInx--;
 
       if (this.activeSongInx < 0) {
@@ -180,7 +169,7 @@ class PlayAlbum {
       }
     }
 
-    this.playSong();
+    this.songAudios[this.activeSongInx].playSong();
     new SetSongDetails(
       this.songAudios,
       this.activeSongInx,
@@ -214,7 +203,8 @@ class PlayAlbum {
       ];
     }
 
-    this.stopPlayingSong();
+    this.songAudios[this.activeSongInx].stopSong();
+    this.toggleBtn.classList.remove("play");
     this.playlistEl.innerHTML = "";
     this.shuffleBtn.className = "text-[#1DB954] hover:scale-105";
     this.shuffleBtnActive = true;
@@ -234,12 +224,6 @@ class PlayAlbum {
     this.repeatBtnActive = true;
     this.repeatBtn.className = "text-[#1DB954] hover:scale-105";
   }
-
-  getReadableTime(duration) {
-    return `${Math.floor(duration / 60)}:${`${
-      Math.floor(duration) % 60
-    }`.padStart(2, "0")}`;
-  }
 }
 
-new PlayAlbum(songs);
+new MusicPlayer(songs);

@@ -26,13 +26,15 @@ class SongButton {
   }
 
   toggleActiveBtn(songBtn, activeSongInx) {
-    this.songsBtns[activeSongInx].domElement().classList.remove("font-bold");
-    songBtn.domElement().classList.add("font-bold");
+    this.songsBtns[activeSongInx].element().classList.remove("font-bold");
+    songBtn.element().classList.add("font-bold");
   }
 
-  domElement() {
+  element() {
     return this.songBtn;
   }
+
+  private
 
   createButton() {
     this.songBtn = document.createElement("button");

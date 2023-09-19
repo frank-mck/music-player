@@ -27,7 +27,7 @@ class SongAudio {
       const time = this.getReadableTime(this.audio.duration);
       this.audio.time = time;
 
-      songBtn.domElement().innerHTML = `${this.title} <span>${time}</span>`;
+      songBtn.element().innerHTML = `${this.title} <span>${time}</span>`;
 
       if (this.index === 0) {
         new SetSongDetails(
@@ -38,11 +38,25 @@ class SongAudio {
           this.index,
           this,
         );
-        this.activeSongBtn = songBtn.domElement();
-        songBtn.domElement().classList.add("font-bold");
+        this.activeSongBtn = songBtn.element();
+        songBtn.element().classList.add("font-bold");
       }
     });
   }
+
+  element() {
+    return this.audio;
+  }
+
+  playSong() {
+    this.audio.play();
+  }
+
+  stopSong() {
+    this.audio.pause();
+  }
+
+  private;
 
   updateTime() {
     this.updateProgress(this.audio.currentTime);
@@ -58,20 +72,6 @@ class SongAudio {
       Math.floor(duration) % 60
     }`.padStart(2, "0")}`;
   }
-
-  domElement() {
-    return this.audio;
-  }
-
-  playSong() {
-    this.audio.play();
-  }
-
-  stopSong() {
-    this.audio.pause();
-  }
-
-  private;
 
   createSong() {
     this.audio = document.createElement("audio");
