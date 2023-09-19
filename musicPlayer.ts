@@ -160,32 +160,9 @@ class MusicPlayer {
     let index;
 
     if (type === "next") {
-      index =
-        this.activeSongInx === this.songs.length - 1
-          ? 0
-          : this.activeSongInx + 1;
-      const songBtn = this.songsBtns[index];
-      songBtn.toggleActiveBtn(songBtn, this.activeSongInx);
-      this.songAudios[this.activeSongInx].stopSong();
-      this.toggleBtn.classList.add("play");
-      this.activeSongInx++;
-
-      if (this.activeSongInx > songs.length - 1) {
-        this.activeSongInx = 0;
-      }
+      index = this.skipNextSong();
     } else if (type === "prev") {
-      index =
-        this.activeSongInx === 0 ? songs.length - 1 : this.activeSongInx - 1;
-      const songBtn = this.songsBtns[index];
-      songBtn.toggleActiveBtn(songBtn, this.activeSongInx);
-      this.songAudios[this.activeSongInx].stopSong();
-      this.toggleBtn.classList.add("play");
-
-      this.activeSongInx--;
-
-      if (this.activeSongInx < 0) {
-        this.activeSongInx = this.songs.length - 1;
-      }
+      index = this.skipPrevSong();
     }
 
     this.songAudios[this.activeSongInx].playSong();
@@ -197,6 +174,37 @@ class MusicPlayer {
       index,
       this.songAudios[this.activeSongInx],
     );
+  }
+
+  skipPrevSong() {
+    const index =
+      this.activeSongInx === 0 ? songs.length - 1 : this.activeSongInx - 1;
+    const songBtn = this.songsBtns[index];
+    songBtn.toggleActiveBtn(songBtn, this.activeSongInx);
+    this.songAudios[this.activeSongInx].stopSong();
+    this.toggleBtn.classList.add("play");
+
+    this.activeSongInx--;
+
+    if (this.activeSongInx < 0) {
+      this.activeSongInx = this.songs.length - 1;
+    }
+    return index;
+  }
+
+  skipNextSong() {
+    const index =
+      this.activeSongInx === this.songs.length - 1 ? 0 : this.activeSongInx + 1;
+    const songBtn = this.songsBtns[index];
+    songBtn.toggleActiveBtn(songBtn, this.activeSongInx);
+    this.songAudios[this.activeSongInx].stopSong();
+    this.toggleBtn.classList.add("play");
+    this.activeSongInx++;
+
+    if (this.activeSongInx > songs.length - 1) {
+      this.activeSongInx = 0;
+    }
+    return index;
   }
 
   shuffleSongs() {
@@ -225,7 +233,7 @@ class MusicPlayer {
     this.songAudios[this.activeSongInx].stopSong();
     this.toggleBtn.classList.remove("play");
     this.playlistEl.innerHTML = "";
-    this.shuffleBtn.className = "text-[#1DB954] hover:scale-105";
+    this.shuffleBtn.className = "text-[var(--active-color)] hover:scale-105";
     this.shuffleBtnActive = true;
     this.activeSongBtn = undefined;
     this.activeSong = undefined;
@@ -241,7 +249,7 @@ class MusicPlayer {
       return;
     }
     this.repeatBtnActive = true;
-    this.repeatBtn.className = "text-[#1DB954] hover:scale-105";
+    this.repeatBtn.className = "text-[var(--active-color)] hover:scale-105";
   }
 }
 

@@ -8,6 +8,7 @@ class SongButton {
   songAudios: SongAudio[];
   activeSongInx: number;
   songTitle: HTMLElement | undefined;
+  activeSongIcon: HTMLElement | undefined;
   constructor(
     audio: SongAudio,
     song: Song,
@@ -26,6 +27,7 @@ class SongButton {
     this.activeSongInx = activeSongInx;
     this.songsBtns = songsBtns;
     this.songTitle = undefined;
+    this.activeSongIcon = undefined;
 
     this.initialize();
   }
@@ -36,7 +38,9 @@ class SongButton {
 
   toggleActiveBtn(songBtn: SongButton, activeSongInx: number) {
     this.songsBtns[activeSongInx].title().className = "";
-    songBtn.title().className = "text-gray-900 font-bold";
+    this.songsBtns[activeSongInx].activeIcon().classList.add("hidden");
+    songBtn.title().className = "text-[var(--active-color)] font-bold";
+    songBtn.activeIcon().classList.remove("hidden");
   }
 
   element() {
@@ -47,20 +51,30 @@ class SongButton {
     return this.songTitle;
   }
 
+  activeIcon() {
+    return this.activeSongIcon;
+  }
+
   private createButton() {
     this.songBtn = document.createElement("button");
-    const textContainer = document.createElement("div");
-    textContainer.className = "flex flex-col items-start";
     this.songTitle = document.createElement("span");
+    const textContainer = document.createElement("div");
     const songArtist = document.createElement("span");
+    this.activeSongIcon = document.createElement("span");
+
     this.songTitle.innerText = `${this.song.title}`;
     songArtist.innerText = `${this.song.artist}`;
-    songArtist.className = "text-sm text-gray-800";
 
+    songArtist.className = "text-sm text-gray-800";
+    textContainer.className = "flex flex-col items-start";
+    this.activeSongIcon.className =
+      "w-2 h-2 rounded-full bg-[var(--active-color)] absolute left-3 top-[50%] -translate-y-[50%] hidden";
+    this.songBtn.className =
+      "py-[5px] flex relative px-8 justify-between m-0 p-0 items-center leading-tight w-full mx-auto rounded-md hover:bg-[var(--light-frost)]";
+
+    textContainer.appendChild(this.activeSongIcon);
     textContainer.appendChild(this.songTitle);
     textContainer.appendChild(songArtist);
     this.songBtn.appendChild(textContainer);
-    this.songBtn.className =
-      "py-2 flex px-8 justify-between leading-tight w-full mx-auto rounded-md hover:bg-[var(--light-frost)]";
   }
 }

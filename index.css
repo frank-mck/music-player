@@ -1,13 +1,15 @@
 :root {
-  --light-frost: hsla(0, 0%, 96%, 0.3);
-  --dark-frost: hsl(0 0% 23% / 0.3);
+  --light-frost: hsla(0, 0%, 86%, 0.7);
+  --dark-frost: hsl(0 0% 3% / 0.5);
   --brand-color: rgb(0, 95, 204);
   --brand-color-2: rgb(80, 0, 184);
   --brand-dark: #181028;
+  --green: #1db954;
+  --active-color: rgb(0, 106, 255);
 }
 
 body {
-  background-image: url("https://images.unsplash.com/photo-1604079681864-c6fbd7eb109c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80");
+  background-image: url("https://images.unsplash.com/photo-1609623096082-ed982304b689?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=785&q=80");
   background-size: cover;
   background-position: 0% 0%;
   background-repeat: no-repeat;

@@ -60,7 +60,8 @@ class SongAudio {
           this.index,
           this,
         );
-        songBtn.title().className = "text-gray-900 font-bold";
+        songBtn.title().className = "text-[var(--active-color)] font-bold";
+        songBtn.activeSongIcon.classList.remove("hidden");
       }
     });
   }
