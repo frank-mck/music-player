@@ -1,6 +1,24 @@
 class SetSongDetails {
-  constructor(songAudios, activeSongInx, activeSong, song, index, audio) {
-    this.progressEl = document.querySelector("#progress");
+  private currentTimeEl: HTMLElement;
+  private titleEl: HTMLElement;
+  private artistEl: HTMLElement;
+  private totalTimeEl: HTMLElement;
+  private thumbnailEl: HTMLImageElement;
+  songAudios: SongAudio[];
+  activeSongInx: number;
+  activeSong: Song;
+  song: Song;
+  index: number;
+  audio: SongAudio;
+
+  constructor(
+    songAudios: SongAudio[],
+    activeSongInx: number,
+    activeSong: Song | undefined,
+    song: Song,
+    index: number,
+    audio: SongAudio,
+  ) {
     this.currentTimeEl = document.querySelector("#current-time");
     this.titleEl = document.querySelector("#title");
     this.artistEl = document.querySelector("#artist");

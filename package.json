@@ -2,15 +2,15 @@
   "name": "music-player",
   "version": "1.0.0",
   "description": "single page music player",
-  "main": "playAlbum.js",
-  "type": "module",
+  "main": "playAlbum.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "open index.html"
+    "start": "npx tsc --outDir dist && open index.html"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "tailwindcss": "^3.3.3"
+    "tailwindcss": "^3.3.3",
+    "typescript": "^5.2.2"
   }
 }

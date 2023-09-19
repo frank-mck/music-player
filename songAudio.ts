@@ -1,6 +1,25 @@
-"use strict";
+interface ExtendedHTMLAudioElement extends HTMLAudioElement {
+  time: string;
+}
+
 class SongAudio {
-  constructor(song, songAudios, activeSongInx, index) {
+  progressEl: HTMLInputElement;
+  currentTimeEl: HTMLElement;
+  audio: ExtendedHTMLAudioElement;
+  song: Song;
+  url: string;
+  thumbnail: string;
+  title: string;
+  artist: string;
+  songAudios: SongAudio[];
+  activeSongInx: number;
+  index: number;
+  constructor(
+    song: Song,
+    songAudios: SongAudio[],
+    activeSongInx: number,
+    index: number,
+  ) {
     this.progressEl = document.querySelector("#progress");
     this.currentTimeEl = document.querySelector("#current-time");
     this.audio;
@@ -19,10 +38,10 @@ class SongAudio {
   initialize() {
     this.createSong();
 
-    this.audio.addEventListener("timeupdate", (e) => this.updateTime(e));
+    this.audio.addEventListener("timeupdate", (e) => this.updateTime());
   }
 
-  loadAudioData(songBtn) {
+  loadAudioData(songBtn: SongButton) {
     this.audio.addEventListener("loadedmetadata", () => {
       const time = this.getReadableTime(this.audio.duration);
       this.audio.time = time;
@@ -33,18 +52,17 @@ class SongAudio {
         new SetSongDetails(
           this.songAudios,
           this.activeSongInx,
-          this.activeSong,
+          undefined,
           this.song,
           this.index,
           this,
         );
-        this.activeSongBtn = songBtn.element();
         songBtn.element().classList.add("font-bold");
       }
     });
   }
 
-  element() {
+  element(): ExtendedHTMLAudioElement {
     return this.audio;
   }
 
@@ -56,34 +74,25 @@ class SongAudio {
     this.audio.pause();
   }
 
-  private;
-
-  updateTime() {
+  private updateTime() {
     this.updateProgress(this.audio.currentTime);
     this.currentTimeEl.innerText = this.getReadableTime(this.audio.currentTime);
   }
 
-  updateProgress(time) {
-    this.progressEl.value = time / this.audio.duration;
+  private updateProgress(time: number) {
+    this.progressEl.value = String(time / this.audio.duration);
   }
 
-  getReadableTime(duration) {
+  private getReadableTime(duration: number) {
     return `${Math.floor(duration / 60)}:${`${
       Math.floor(duration) % 60
     }`.padStart(2, "0")}`;
   }
 
-  createSong() {
-    this.audio = document.createElement("audio");
+  private createSong() {
+    this.audio = document.createElement("audio") as ExtendedHTMLAudioElement;
     this.audio.src = this.url;
     this.audio.controls = true;
     this.audio.classList.add("hidden");
-  }
-
-  loadImage() {
-    const hiddenImagesEl = document.createElement("img");
-    hiddenImagesEl.src = this.thumbnail;
-    hiddenImagesEl.classList.add("hidden");
-    document.body.appendChild(hiddenImagesEl);
   }
 }

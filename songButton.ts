@@ -1,13 +1,20 @@
-"use strict";
 class SongButton {
+  songBtn: HTMLElement;
+  audio: SongAudio;
+  song: Song;
+  songsBtns: SongButton[];
+  index: number;
+  activeSong: Song;
+  songAudios: SongAudio[];
+  activeSongInx: number;
   constructor(
-    audio,
-    song,
-    index,
-    activeSong,
-    songAudios,
-    activeSongInx,
-    songsBtns,
+    audio: SongAudio,
+    song: Song,
+    index: number,
+    activeSong: Song,
+    songAudios: SongAudio[],
+    activeSongInx: number,
+    songsBtns: SongButton[],
   ) {
     this.songBtn;
     this.audio = audio;
@@ -21,11 +28,11 @@ class SongButton {
     this.initialize();
   }
 
-  initialize() {
+  private initialize() {
     this.createButton();
   }
 
-  toggleActiveBtn(songBtn, activeSongInx) {
+  toggleActiveBtn(songBtn: SongButton, activeSongInx: number) {
     this.songsBtns[activeSongInx].element().classList.remove("font-bold");
     songBtn.element().classList.add("font-bold");
   }
@@ -34,9 +41,7 @@ class SongButton {
     return this.songBtn;
   }
 
-  private
-
-  createButton() {
+  private createButton() {
     this.songBtn = document.createElement("button");
     this.songBtn.className = "py-2 flex justify-between w-full hover:font-bold";
   }

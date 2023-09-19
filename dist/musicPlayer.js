@@ -1,5 +1,3 @@
-"use strict";
-
 const songs = [
   {
     title: "Night Vlog",
@@ -37,7 +35,6 @@ const songs = [
       "https://images.unsplash.com/photo-1511497584788-876760111969?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=333&q=80",
   },
 ];
-
 class MusicPlayer {
   constructor(songs) {
     this.songs = songs;
@@ -54,28 +51,24 @@ class MusicPlayer {
     this.activeSongBtn = undefined;
     this.songAudios = [];
     this.songsBtns = [];
-
     this.iterateSongs = this.iterateSongs.bind(this);
     this.skipSong = this.skipSong.bind(this);
     this.shuffleSongs = this.shuffleSongs.bind(this);
     this.repeatSong = this.repeatSong.bind(this);
     this.togglePlayBtn = this.togglePlayBtn.bind(this);
-
     this.nextBtn.addEventListener("click", () => this.skipSong("next"));
     this.previousBtn.addEventListener("click", () => this.skipSong("prev"));
     this.shuffleBtn.addEventListener("click", () => this.shuffleSongs());
     this.repeatBtn.addEventListener("click", () => this.repeatSong());
     this.toggleBtn.addEventListener("click", () => this.togglePlayBtn());
-
     this.iterateSongs();
   }
-
   iterateSongs() {
     this.songs.forEach((song, index) => {
+      var _a, _b, _c, _d;
       if (index === 0) {
         this.activeSongInx = 0;
       }
-
       const songAudio = new SongAudio(
         song,
         this.songAudios,
@@ -91,31 +84,32 @@ class MusicPlayer {
         this.activeSongInx,
         this.songsBtns,
       );
-
-      this.songAudios.push(songAudio);
-      this.songsBtns.push(songBtn);
-
+      (_a = this.songAudios) === null || _a === void 0
+        ? void 0
+        : _a.push(songAudio);
+      (_b = this.songsBtns) === null || _b === void 0
+        ? void 0
+        : _b.push(songBtn);
       songAudio.loadAudioData(songBtn);
-
       this.playlistEl.classList.add(`h-[220px]`);
-      this.playlistEl?.appendChild(songAudio.element());
-      this.playlistEl?.appendChild(songBtn.element());
-
+      (_c = this.playlistEl) === null || _c === void 0
+        ? void 0
+        : _c.appendChild(songAudio.element());
+      (_d = this.playlistEl) === null || _d === void 0
+        ? void 0
+        : _d.appendChild(songBtn.element());
       songBtn.element().addEventListener("click", () => {
         songBtn.toggleActiveBtn(this.songsBtns[index], this.activeSongInx);
         this.playSelectedSong(song, index);
       });
     });
   }
-
   playSelectedSong(song, index) {
     if (index === this.activeSongInx) {
       return;
     }
-
     this.songAudios[this.activeSongInx].element().pause();
     this.activeSongInx = index;
-
     new SetSongDetails(
       this.songAudios,
       this.activeSongInx,
@@ -126,7 +120,6 @@ class MusicPlayer {
     );
     this.togglePlayBtn();
   }
-
   togglePlayBtn() {
     if (this.songAudios[this.activeSongInx].element().paused) {
       this.songAudios[this.activeSongInx].element().play();
@@ -136,10 +129,8 @@ class MusicPlayer {
       this.toggleBtn.classList.remove("play");
     }
   }
-
   skipSong(type) {
     let index;
-
     if (type === "next") {
       index =
         this.activeSongInx === this.songs.length - 1
@@ -150,7 +141,6 @@ class MusicPlayer {
       this.songAudios[this.activeSongInx].stopSong();
       this.toggleBtn.classList.add("play");
       this.activeSongInx++;
-
       if (this.activeSongInx > songs.length - 1) {
         this.activeSongInx = 0;
       }
@@ -161,48 +151,40 @@ class MusicPlayer {
       songBtn.toggleActiveBtn(songBtn, this.activeSongInx);
       this.songAudios[this.activeSongInx].stopSong();
       this.toggleBtn.classList.add("play");
-
       this.activeSongInx--;
-
       if (this.activeSongInx < 0) {
         this.activeSongInx = this.songs.length - 1;
       }
     }
-
     this.songAudios[this.activeSongInx].playSong();
     new SetSongDetails(
       this.songAudios,
       this.activeSongInx,
       this.activeSong,
       this.songs[this.activeSongInx],
-      this.index,
+      index,
       this.songAudios[this.activeSongInx],
     );
   }
-
   shuffleSongs() {
     if (this.shuffleBtnActive) {
       this.shuffleBtn.className = "hover:font-bold hover:text-gray-900";
       this.shuffleBtnActive = false;
-
       return;
     }
     let currentIndex = this.songs.length,
       randomIndex;
-
     // While there remain elements to shuffle.
     while (currentIndex > 0) {
       // Pick a remaining element.
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
-
       // And swap it with the current element.
       [this.songs[currentIndex], this.songs[randomIndex]] = [
         this.songs[randomIndex],
         this.songs[currentIndex],
       ];
     }
-
     this.songAudios[this.activeSongInx].stopSong();
     this.toggleBtn.classList.remove("play");
     this.playlistEl.innerHTML = "";
@@ -214,7 +196,6 @@ class MusicPlayer {
     this.songAudios = [];
     this.iterateSongs();
   }
-
   repeatSong() {
     if (this.repeatBtnActive) {
       this.repeatBtnActive = false;
@@ -225,5 +206,4 @@ class MusicPlayer {
     this.repeatBtn.className = "text-[#1DB954] hover:scale-105";
   }
 }
-
 new MusicPlayer(songs);
