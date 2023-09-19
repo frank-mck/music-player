@@ -21,7 +21,10 @@ class SongAudio {
     this.audio.addEventListener("loadedmetadata", () => {
       const time = this.getReadableTime(this.audio.duration);
       this.audio.time = time;
-      songBtn.element().innerHTML = `${this.title} <span>${time}</span>`;
+      const span = document.createElement("span");
+      span.innerText = time;
+      span.className = "text-sm";
+      songBtn.element().appendChild(span);
       if (this.index === 0) {
         new SetSongDetails(
           this.songAudios,
@@ -31,7 +34,7 @@ class SongAudio {
           this.index,
           this,
         );
-        songBtn.element().classList.add("font-bold");
+        songBtn.title().className = "text-gray-900 font-bold";
       }
     });
   }
@@ -44,12 +47,6 @@ class SongAudio {
   stopSong() {
     this.audio.pause();
   }
-  // loadImage() {
-  //   const hiddenImagesEl = document.createElement("img");
-  //   hiddenImagesEl.src = this.thumbnail;
-  //   hiddenImagesEl.classList.add("hidden");
-  //   document.body.appendChild(hiddenImagesEl);
-  // }
   updateTime() {
     this.updateProgress(this.audio.currentTime);
     this.currentTimeEl.innerText = this.getReadableTime(this.audio.currentTime);

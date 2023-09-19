@@ -7,26 +7,37 @@
     <link rel="stylesheet" type="text/css" href="index.css" />
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="bg-[#181028] p-3 flex justify-center items-center min-h-screen">
-    <section class="bg-white text-[#181028] p-8 shadow-lg max-w-sm w-full">
-      <header class="text-center">
+  <body
+    class="bg-[var(--brand-color)] p-3 flex justify-center items-center min-h-screen"
+  >
+    <section
+      class="bg-[var(--light-frost)] py-8 text-[#181028] rounded-lg shadow-lg max-w-sm w-full"
+    >
+      <header class="text-center px-8">
         <p>PLAYING NOW</p>
         <h1 id="title" class="font-bold text-lg">---</h1>
         <small id="artist">---</small>
       </header>
       <img
         id="thumbnail"
-        class="w-60 aspect-square abject-cover mx-auto my-6 shadow-lg hover:scale-110 transition-all"
+        class="w-60 rounded-lg aspect-square abject-cover mx-auto my-4 shadow-lg hover:scale-110 transition-all"
         alt="unsplash"
       />
-      <progress id="progress" class="w-full" id="file" value="0"></progress>
-      <div class="flex justify-between">
+      <progress
+        id="progress"
+        class="w-full px-8"
+        id="file"
+        value="0"
+      ></progress>
+      <div class="flex px-8 justify-between">
         <small id="current-time">0:00</small>
         <small id="total-time" class="ml-auto"></small>
       </div>
 
-      <div class="flex items-center justify-evenly text-gray-400 gap-2 my-4">
-        <button id="shuffle-btn" class="hover:text-gray-900">
+      <div
+        class="px-8 flex items-center justify-evenly text-gray-400 gap-2 my-4"
+      >
+        <button id="shuffle-btn" class="hover:text-gray-900 text-gray-600">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -47,16 +58,16 @@
             ></path>
           </svg>
         </button>
-        <button id="prev-btn" class="hover:text-gray-900">
+        <button id="prev-btn" class="hover:text-gray-900 text-gray-600">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="icon icon-tabler icon-tabler-player-track-prev"
-            width="24"
-            height="24"
+            width="26"
+            height="26"
             viewBox="0 0 24 24"
             stroke-width="2"
             stroke="currentColor"
-            fill="none"
+            fill="currentColor"
             stroke-linecap="round"
             stroke-linejoin="round"
           >
@@ -67,7 +78,7 @@
         </button>
         <button
           id="toggle-btn"
-          class="text-gray-900 group flex border-2 border-gray-900 hover:scale-105 rounded-full w-12 h-12 items-center justify-center"
+          class="text-gray-900 group flex bg-orange-100 hover:scale-105 rounded-full w-12 h-12 items-center justify-center"
         >
           <svg
             class="group-[.play]:hidden"
@@ -76,16 +87,20 @@
             height="30"
             viewBox="0 0 24 24"
             stroke-width="2"
-            stroke="currentColor"
-            fill="none"
+            stroke="rgb(255 237 213)"
+            fill="rgb(255 237 213)"
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path
+              stroke="rgb(255 237 213)"
+              d="M0 0h24v24H0z"
+              fill="rgb(255 237 213)"
+            ></path>
             <path
               d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z"
               stroke-width="0"
-              fill="currentColor"
+              fill="var(--brand-dark)"
             ></path>
           </svg>
           <svg
@@ -114,16 +129,16 @@
             ></path>
           </svg>
         </button>
-        <button id="next-btn" class="hover:text-gray-900">
+        <button id="next-btn" class="hover:text-gray-900 text-gray-600">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="icon icon-tabler icon-tabler-player-track-next"
-            width="24"
-            height="24"
+            width="26"
+            height="26"
             viewBox="0 0 24 24"
             stroke-width="2"
             stroke="currentColor"
-            fill="none"
+            fill="currentColor"
             stroke-linecap="round"
             stroke-linejoin="round"
           >
@@ -132,7 +147,7 @@
             <path d="M14 5v14l8 -7z"></path>
           </svg>
         </button>
-        <button id="repeat-btn" class="hover:text-gray-900">
+        <button id="repeat-btn" class="hover:text-gray-900 text-gray-600">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="icon icon-tabler icon-tabler-repeat"
@@ -152,8 +167,9 @@
         </button>
       </div>
 
-      <div id="playlist" class="space-y-2 transition-all"></div>
+      <div id="playlist" class="space-y-2 transition-all overflow-scroll"></div>
     </section>
+
     <script src="dist/setSongDetails.js"></script>
     <script src="dist/songAudio.js"></script>
     <script src="dist/songButton.js"></script>
